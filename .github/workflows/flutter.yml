@@ -10,5 +10,6 @@ jobs:
           flutter-version: '1.24.x'
           channel: 'dev'
       - run: flutter pub get
+      - run: dart analyze .
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter test
