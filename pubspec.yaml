@@ -1,0 +1,22 @@
+name: page_router
+description: A router that uses Flutter's Navigator 2.0
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  trie_router: ^1.0.0
+  path: ^1.0.0
+  collection: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+
