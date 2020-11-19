@@ -98,8 +98,6 @@ class PageRouterDelegate extends RouterDelegate<_RouteData>
     return Navigator(
       key: navigatorKey,
       pages: [
-        // TODO: give the user the option to customize the page (cupertino or
-        // material)
         ..._routeStack.map((routeName) {
           var trieData = trie.get(path.split(routeName));
           return trieData.value(context, trieData.parameters);
