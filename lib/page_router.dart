@@ -60,17 +60,12 @@ class _RouteData {
   _RouteData(this.routeString);
 
   @override
-  bool operator ==(Object other) {
-    return other is _RouteData && routeString == other.routeString;
-  }
+  bool operator ==(Object other) =>
+      other is _RouteData && routeString == other.routeString;
 
-  int get hashCode {
-    routeString.hashCode;
-  }
+  int get hashCode => routeString.hashCode;
 
-  String toString() {
-    return 'RooterData route: ${routeString}';
-  }
+  String toString() => '_RouteData route: $routeString';
 }
 
 class PageRouterDelegate extends RouterDelegate<_RouteData>
@@ -123,7 +118,7 @@ class PageRouterDelegate extends RouterDelegate<_RouteData>
   }
 
   @override
-  Future<void> setNewRoutePath(_RouteData configuration) {
+  Future<void> setNewRoutePath(_RouteData configuration) async {
     // TODO: allow parent pages to be included
     // Currently, this clears the route stack, which means
     // Any time a new deep link is handled the set of pages is cleared.
