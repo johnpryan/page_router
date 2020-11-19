@@ -29,13 +29,12 @@ typedef PageRouterBuilder = Page Function(
     BuildContext context, Map<String, String> parameters);
 
 class PageRouterData {
-  final TrieRouter<PageRouterBuilder> _trieRouter;
   final PageRouterDelegate routerDelegate;
   final PageRouterInformationParser informationParser;
 
-  PageRouterData._(this._trieRouter)
-      : routerDelegate = PageRouterDelegate(_trieRouter),
-        informationParser = PageRouterInformationParser(_trieRouter);
+  PageRouterData._(TrieRouter<PageRouterBuilder> trieRouter)
+      : routerDelegate = PageRouterDelegate(trieRouter),
+        informationParser = PageRouterInformationParser(trieRouter);
 
   factory PageRouterData(Map<String, PageRouterBuilder> routes) =>
       PageRouterData._(_createTrieRouter(routes));
