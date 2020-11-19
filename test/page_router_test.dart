@@ -54,7 +54,7 @@ class __TestAppState extends State<_TestApp> {
     return PageRouter(
       data: widget.pageRouterData,
       child: MaterialApp.router(
-        title: 'Books App',
+        title: 'page_router test app',
         routerDelegate: widget.pageRouterData.routerDelegate,
         routeInformationParser: widget.pageRouterData.informationParser,
       ),

@@ -54,7 +54,7 @@ class PageRouterData {
 }
 
 class _RouteData {
-  // The pattern used to parse the route string. e.g. "/books/:id"
+  // The pattern used to parse the route string. e.g. "/users/:id"
   final String routeString;
 
   _RouteData(this.routeString);
