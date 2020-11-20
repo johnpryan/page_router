@@ -1,6 +1,6 @@
 # page_router
 
-A router that uses Flutter's Navigator 2.0
+Experimental router for Flutter built using the Navigator 2.0 API.
 
 ## Usage
 
