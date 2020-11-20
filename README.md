@@ -55,7 +55,7 @@ See the example/ application for a complete example
 - [ ] Displaying subroutes on the same screen
 - [ ] Validation
 - [ ] replaceNamed, replaceAllNamed, etc.
-- [ ] replaceAll(List<String> routes) - replaces the entire stack of pages, giving the user a declarative API.
+- [ ] replaceAll(List<String> routes) - replaces the entire stack of pages
 - [ ] Including pages on the stack
 
 ### Issue: Hierarchical Routing
