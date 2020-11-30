@@ -21,6 +21,18 @@ class PageRouter extends InheritedWidget {
     data.pushNamed(routeName);
   }
 
+  void replaceNamed(String routeName) {
+    data.replaceNamed(routeName);
+  }
+
+  void replaceAllNamed(List<String> routeNames) {
+    data.replaceAllNamed(routeNames);
+  }
+
+  void pop() {
+    data.pop();
+  }
+
   @override
   bool updateShouldNotify(PageRouter old) => data != old.data;
 }
@@ -50,6 +62,18 @@ class PageRouterData {
 
   void pushNamed(String routeName) {
     routerDelegate.pushNamed(routeName);
+  }
+
+  void replaceNamed(String routeName) {
+    routerDelegate.replaceNamed(routeName);
+  }
+
+  void replaceAllNamed(List<String> routeNames) {
+    routerDelegate.replaceAllNamed(routeNames);
+  }
+
+  void pop(){
+    routerDelegate.pop();
   }
 }
 
@@ -85,6 +109,18 @@ class PageRouterDelegate extends RouterDelegate<_RouteData>
 
   void pushNamed(String name) {
     _routeStack.add(name);
+    notifyListeners();
+  }
+
+  void replaceNamed(String name) {
+    _routeStack.removeLast();
+    _routeStack.add(name);
+    notifyListeners();
+  }
+
+  void replaceAllNamed(List<String> routeNames) {
+    _routeStack.clear();
+    _routeStack.addAll(routeNames);
     notifyListeners();
   }
 
