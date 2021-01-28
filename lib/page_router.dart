@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:trie_router/trie_router.dart';
 import 'package:path/path.dart' as path;
 
+import 'src/route_data.dart';
 import 'src/route_path.dart';
 export 'src/route_path.dart';
 
@@ -72,28 +73,13 @@ class PageRouterData {
     routerDelegate.replaceAllNamed(routeNames);
   }
 
-  void pop(){
+  void pop() {
     routerDelegate.pop();
   }
 }
 
-class _RouteData {
-  // The pattern used to parse the route string. e.g. "/users/:id"
-  final String routeString;
-
-  _RouteData(this.routeString);
-
-  @override
-  bool operator ==(Object other) =>
-      other is _RouteData && routeString == other.routeString;
-
-  int get hashCode => routeString.hashCode;
-
-  String toString() => '_RouteData route: $routeString';
-}
-
-class PageRouterDelegate extends RouterDelegate<_RouteData>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<_RouteData> {
+class PageRouterDelegate extends RouterDelegate<RouteData>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<RouteData> {
   final TrieRouter<RoutePath> trie;
 
   @override
@@ -103,30 +89,57 @@ class PageRouterDelegate extends RouterDelegate<_RouteData>
 
   PageRouterDelegate(this.trie) : navigatorKey = GlobalKey<NavigatorState>();
 
-  _RouteData get currentConfiguration {
-    return _RouteData(_routeStack.last);
+  RouteData get currentConfiguration {
+    return RouteData(_routeStack.last);
   }
 
-  void pushNamed(String name) {
+  Future pushNamed(String name) async {
+    if (!await _validate(name)) {
+      return;
+    }
     _routeStack.add(name);
     notifyListeners();
   }
 
-  void replaceNamed(String name) {
+  Future replaceNamed(String name) async {
+    if (!await _validate(name)) {
+      return;
+    }
     _routeStack.removeLast();
     _routeStack.add(name);
     notifyListeners();
   }
 
-  void replaceAllNamed(List<String> routeNames) {
+  Future replaceAllNamed(List<String> routeNames) async {
+    for (var name in routeNames) {
+      if (!await _validate(name)) {
+        return;
+      }
+    }
     _routeStack.clear();
     _routeStack.addAll(routeNames);
     notifyListeners();
   }
 
-  void pop() {
+  Future pop() async {
+    if (!await _validate(_routeStack.last)) {
+      return;
+    }
+
     _routeStack.removeLast();
     notifyListeners();
+  }
+
+  Future<bool> _validate(String routeName) async {
+    var trieData = trie.get(path.split(routeName));
+    if (trieData == null) {
+      return false;
+    }
+    var routePath = trieData.value;
+    if (routePath.validator == null) {
+      return true;
+    }
+    return await routePath.validator(trieData.parameters);
   }
 
   @override
@@ -153,29 +166,33 @@ class PageRouterDelegate extends RouterDelegate<_RouteData>
   }
 
   @override
-  Future<void> setNewRoutePath(_RouteData configuration) async {
+  Future<void> setNewRoutePath(RouteData configuration) async {
+    if(!await _validate(configuration.routeString)) {
+      return;
+    }
     // TODO: allow parent pages to be included
     // Currently, this clears the route stack, which means
     // Any time a new deep link is handled the set of pages is cleared.
     _routeStack
       ..clear()
       ..add(configuration.routeString);
+    notifyListeners();
   }
 }
 
-class PageRouterInformationParser extends RouteInformationParser<_RouteData> {
+class PageRouterInformationParser extends RouteInformationParser<RouteData> {
   final TrieRouter trie;
 
   PageRouterInformationParser(this.trie);
 
   @override
-  Future<_RouteData> parseRouteInformation(
+  Future<RouteData> parseRouteInformation(
       RouteInformation routeInformation) async {
-    return _RouteData(routeInformation.location);
+    return RouteData(routeInformation.location);
   }
 
   @override
-  RouteInformation restoreRouteInformation(_RouteData data) {
+  RouteInformation restoreRouteInformation(RouteData data) {
     return RouteInformation(location: data.routeString);
   }
 }
