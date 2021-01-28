@@ -1,3 +1,7 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.2] - 1/1/2021
 
-* TODO: Describe initial release.
+* Add replaceNamed and replaceAllNamed
+
+## [0.0.1] - 1/1/2021
+
+* Initial release

@@ -2,44 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:page_router/page_router.dart';
-
-void main() {
-  testWidgets('basic test', (tester) async {
-    var pageRouter = PageRouterData({
-      '/': RoutePath(
-        builder: (context, params) => MaterialPage(
+final routes = {
+  '/': RoutePath(
+    builder: (context, params) =>
+        MaterialPage(
           child: Scaffold(
             body: Center(
               child: Text('home screen'),
             ),
           ),
         ),
-      ),
-      '/details': RoutePath(
-        builder: (context, params) => MaterialPage(
+  ),
+  '/details': RoutePath(
+    builder: (context, params) =>
+        MaterialPage(
           child: Scaffold(
             body: Center(
               child: Text('details screen'),
             ),
           ),
         ),
-      ),
-      '/user/:id': RoutePath(
-        builder: (context, params) => MaterialPage(
+  ),
+  '/user/:id': RoutePath(
+    builder: (context, params) =>
+        MaterialPage(
           child: Scaffold(
             body: Center(
               child: Text('User ${params[":id"]}'),
             ),
           ),
         ),
-      ),
-    });
+  ),
+};
+
+void main() {
+  testWidgets('basic test', (tester) async {
+    var pageRouter = PageRouterData(routes);
     await tester.pumpWidget(_TestApp(pageRouter));
     expect(find.text('home screen'), findsOneWidget);
     pageRouter.pushNamed('/details');
     await tester.pumpAndSettle();
     expect(find.text('details screen'), findsOneWidget);
     pageRouter.pushNamed('/user/123');
+    await tester.pumpAndSettle();
+    expect(find.text('User 123'), findsOneWidget);
+  });
+
+  testWidgets('replaceAllNamed and replaceNamed', (tester) async {
+    var pageRouter = PageRouterData(routes);
+    await tester.pumpWidget(_TestApp(pageRouter));
+    pageRouter.replaceAllNamed(['/', '/details']);
+    await tester.pumpAndSettle();
+    expect(find.text('details screen'), findsOneWidget);
+    pageRouter.pop();
+    await tester.pumpAndSettle();
+    expect(find.text('home screen'), findsOneWidget);
+
+    pageRouter.replaceNamed('/user/123');
     await tester.pumpAndSettle();
     expect(find.text('User 123'), findsOneWidget);
   });

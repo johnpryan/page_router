@@ -59,8 +59,6 @@ See the example/ application for a complete example
 - [ ] Hierarchical Routing (see section below)
 - [ ] Displaying subroutes on the same screen
 - [ ] Validation
-- [ ] replaceNamed, replaceAllNamed, etc.
-- [ ] replaceAll(List<String> routes) - replaces the entire stack of pages
 - [ ] Including pages on the stack
 
 ### Issue: Hierarchical Routing

@@ -1,6 +1,6 @@
 name: page_router
 description: A router that uses Flutter's Navigator 2.0
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/johnpryan/page_router
 
 environment:
