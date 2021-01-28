@@ -12,20 +12,26 @@ class PageRouterExample extends StatefulWidget {
 
 class _PageRouterExampleState extends State<PageRouterExample> {
   final routerData = PageRouterData({
-    '/': (context, params) => FadeTransitionPage(
-          key: ValueKey('/'),
-          child: HomeScreen(),
+    '/': RoutePath(
+      builder: (context, params) => FadeTransitionPage(
+        key: ValueKey('/'),
+        child: HomeScreen(),
+      ),
+    ),
+    '/users/:id': RoutePath(
+      builder: (context, params) => MaterialPage(
+        key: ValueKey('/users/:id'),
+        child: UserScreen(userId: params[':id']),
+      ),
+    ),
+    '/users/:id/preferences': RoutePath(
+      builder: (context, params) => FadeTransitionPage(
+        key: ValueKey('/users/:id/preferences'),
+        child: UserPreferencesScreen(
+          userId: params[':id'],
         ),
-    '/users/:id': (context, params) => MaterialPage(
-          key: ValueKey('/users/:id'),
-          child: UserScreen(userId: params[':id']),
-        ),
-    '/users/:id/preferences': (context, params) => FadeTransitionPage(
-          key: ValueKey('/users/:id/preferences'),
-          child: UserPreferencesScreen(
-            userId: params[':id'],
-          ),
-        ),
+      ),
+    ),
   });
 
   @override

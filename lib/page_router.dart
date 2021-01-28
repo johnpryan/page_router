@@ -1,8 +1,11 @@
 library page_router;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:trie_router/trie_router.dart';
 import 'package:path/path.dart' as path;
+
+import 'src/route_path.dart';
+export 'src/route_path.dart';
 
 class PageRouter extends InheritedWidget {
   final PageRouterData data;
@@ -25,23 +28,20 @@ class PageRouter extends InheritedWidget {
   bool updateShouldNotify(PageRouter old) => data != old.data;
 }
 
-typedef PageRouterBuilder = Page Function(
-    BuildContext context, Map<String, String> parameters);
-
 class PageRouterData {
   final PageRouterDelegate routerDelegate;
   final PageRouterInformationParser informationParser;
 
-  PageRouterData._(TrieRouter<PageRouterBuilder> trieRouter)
+  PageRouterData._(TrieRouter<RoutePath> trieRouter)
       : routerDelegate = PageRouterDelegate(trieRouter),
         informationParser = PageRouterInformationParser(trieRouter);
 
-  factory PageRouterData(Map<String, PageRouterBuilder> routes) =>
+  factory PageRouterData(Map<String, RoutePath> routes) =>
       PageRouterData._(_createTrieRouter(routes));
 
-  static TrieRouter<PageRouterBuilder> _createTrieRouter(
-      Map<String, PageRouterBuilder> routes) {
-    var trie = TrieRouter<PageRouterBuilder>();
+  static TrieRouter<RoutePath> _createTrieRouter(
+      Map<String, RoutePath> routes) {
+    var trie = TrieRouter<RoutePath>();
     for (var key in routes.keys) {
       trie.add(path.split(key), routes[key]);
     }
@@ -70,7 +70,7 @@ class _RouteData {
 
 class PageRouterDelegate extends RouterDelegate<_RouteData>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<_RouteData> {
-  final TrieRouter<PageRouterBuilder> trie;
+  final TrieRouter<RoutePath> trie;
 
   @override
   final GlobalKey<NavigatorState> navigatorKey;
@@ -100,7 +100,8 @@ class PageRouterDelegate extends RouterDelegate<_RouteData>
       pages: [
         ..._routeStack.map((routeName) {
           var trieData = trie.get(path.split(routeName));
-          return trieData.value(context, trieData.parameters);
+          var routePath = trieData.value;
+          return routePath.builder(context, trieData.parameters);
         }),
       ],
       onPopPage: (route, result) {

@@ -6,24 +6,30 @@ import 'package:page_router/page_router.dart';
 void main() {
   testWidgets('basic test', (tester) async {
     var pageRouter = PageRouterData({
-      '/': (context, params) => MaterialPage(
-        child: Scaffold(
-          body: Center(
-            child: Text('home screen'),
+      '/': RoutePath(
+        builder: (context, params) => MaterialPage(
+          child: Scaffold(
+            body: Center(
+              child: Text('home screen'),
+            ),
           ),
         ),
       ),
-      '/details': (context, params) => MaterialPage(
-        child: Scaffold(
-          body: Center(
-            child: Text('details screen'),
+      '/details': RoutePath(
+        builder: (context, params) => MaterialPage(
+          child: Scaffold(
+            body: Center(
+              child: Text('details screen'),
+            ),
           ),
         ),
       ),
-      '/user/:id': (context, params) => MaterialPage(
-        child: Scaffold(
-          body: Center(
-            child: Text('User ${params[":id"]}'),
+      '/user/:id': RoutePath(
+        builder: (context, params) => MaterialPage(
+          child: Scaffold(
+            body: Center(
+              child: Text('User ${params[":id"]}'),
+            ),
           ),
         ),
       ),
