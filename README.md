@@ -7,21 +7,26 @@ Experimental router for Flutter built using the Navigator 2.0 API.
 ```dart
 class _PageRouterExampleState extends State<PageRouterExample> {
   final routerData = PageRouterData({
-    '/': (context, params) => FadeTransitionPage(
-          key: ValueKey('/'),
-          child: HomeScreen(),
+    '/': RoutePath(
+      builder: (context, params) => FadeTransitionPage(
+        key: ValueKey('/'),
+        child: HomeScreen(),
+      ),
+    ),
+    '/users/:id': RoutePath(
+      builder: (context, params) => MaterialPage(
+        key: ValueKey('/users/:id'),
+        child: UserScreen(userId: params[':id']),
+      ),
+    ),
+    '/users/:id/preferences': RoutePath(
+      builder: (context, params) => FadeTransitionPage(
+        key: ValueKey('/users/:id/preferences'),
+        child: UserPreferencesScreen(
+          userId: params[':id'],
         ),
-    '/users/:id': (context, params) => MaterialPage(
-          key: ValueKey('/users/:id'),
-          child: UserScreen(userId: params[':id']),
-        ),
-    '/users/:id/preferences': (context, params) => FadeTransitionPage(
-          key: ValueKey('/users/:id/preferences'),
-          child: UserPreferencesScreen(
-            userId: params[':id'],
-          ),
-        ),
-  });
+      ),
+    ),
 
   @override
   Widget build(BuildContext context) {
@@ -62,22 +67,28 @@ See the example/ application for a complete example
 Right now, this package requires each route to be defined up-front:
 
 ```dart
-var routerData = PageRouterData({
-  '/': (context, params) => FadeTransitionPage(
+  final routerData = PageRouterData({
+    '/': RoutePath(
+      builder: (context, params) => FadeTransitionPage(
         key: ValueKey('/'),
         child: HomeScreen(),
       ),
-  '/users/:id': (context, params) => MaterialPage(
+    ),
+    '/users/:id': RoutePath(
+      builder: (context, params) => MaterialPage(
         key: ValueKey('/users/:id'),
         child: UserScreen(userId: params[':id']),
       ),
-  '/users/:id/preferences': (context, params) => FadeTransitionPage(
+    ),
+    '/users/:id/preferences': RoutePath(
+      builder: (context, params) => FadeTransitionPage(
         key: ValueKey('/users/:id/preferences'),
         child: UserPreferencesScreen(
           userId: params[':id'],
         ),
       ),
-});
+    ),
+  });
 ```
 
 Sometimes, parts of the app are built separately, with separate routes. For
@@ -91,7 +102,7 @@ routing. For example:
 library app;
 import 'team_b.dart';
 
-var routerData = PageRouterData.hierarchical({
+var routerData = PageRouterData({
   '/': RoutePath(
     builder: (context, params) => MaterialPage(
       child: Scaffold(
