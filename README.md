@@ -66,7 +66,7 @@ See the example/ application for a complete example
 
 - [ ] Hierarchical Routing (see section below)
 - [ ] Displaying subroutes on the same screen
-- [ ] Validation
+- [x] Validation
 - [ ] Including pages on the stack
 
 ### Issue: Hierarchical Routing
