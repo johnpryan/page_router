@@ -14,12 +14,14 @@ class _PageRouterExampleState extends State<PageRouterExample> {
       ),
     ),
     '/users/:id': RoutePath(
+      validator: idValidator,
       builder: (context, params) => MaterialPage(
         key: ValueKey('/users/:id'),
         child: UserScreen(userId: params[':id']),
       ),
     ),
     '/users/:id/preferences': RoutePath(
+      validator: idValidator,
       builder: (context, params) => FadeTransitionPage(
         key: ValueKey('/users/:id/preferences'),
         child: UserPreferencesScreen(
@@ -27,6 +29,12 @@ class _PageRouterExampleState extends State<PageRouterExample> {
         ),
       ),
     ),
+  });
+
+  Validator idValidator = (params) async {
+    var id = int.tryParse(params[':id']);
+    return id != null && id < 100;
+  };
 
   @override
   Widget build(BuildContext context) {
