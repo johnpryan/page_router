@@ -55,10 +55,27 @@ class PageRouterData {
   static TrieRouter<RoutePath> _createTrieRouter(
       Map<String, RoutePath> routes) {
     var trie = TrieRouter<RoutePath>();
-    for (var key in routes.keys) {
-      trie.add(path.split(key), routes[key]);
-    }
+    _addRoutesRecursive(trie, routes, []);
+    print(trie.get(['/', 'users', '3', 'settings']));
     return trie;
+  }
+
+  static void _addRoutesRecursive(TrieRouter<RoutePath> trie,
+      Map<String, RoutePath> routes, List<String> parentPathComponents) {
+    for (var key in routes.keys) {
+      var route = routes[key];
+      var pathComponents = path.split(key);
+      var components = [
+        ...parentPathComponents,
+        ...pathComponents,
+      ];
+      print('adding $components');
+
+      trie.add(components, route);
+      if (route.subroutes != null && route.subroutes.isNotEmpty) {
+        _addRoutesRecursive(trie, route.subroutes, pathComponents);
+      }
+    }
   }
 
   void pushNamed(String routeName) {
@@ -167,7 +184,7 @@ class PageRouterDelegate extends RouterDelegate<RouteData>
 
   @override
   Future<void> setNewRoutePath(RouteData configuration) async {
-    if(!await _validate(configuration.routeString)) {
+    if (!await _validate(configuration.routeString)) {
       return;
     }
     // TODO: allow parent pages to be included

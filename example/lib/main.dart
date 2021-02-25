@@ -29,15 +29,17 @@ class _PageRouterExampleState extends State<PageRouterExample> {
         key: ValueKey('/users/:id'),
         child: UserScreen(userId: params[':id']),
       ),
-    ),
-    '/users/:id/preferences': RoutePath(
-      validator: idValidator,
-      builder: (context, params) => FadeTransitionPage(
-        key: ValueKey('/users/:id/preferences'),
-        child: UserPreferencesScreen(
-          userId: params[':id'],
+      subroutes: {
+        'preferences': RoutePath(
+          validator: idValidator,
+          builder: (context, params) => FadeTransitionPage(
+            key: ValueKey('/preferences'),
+            child: UserPreferencesScreen(
+              userId: params[':id'],
+            ),
+          ),
         ),
-      ),
+      }
     ),
   });
 
@@ -67,7 +69,13 @@ class HomeScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.headline3,
             ),
             OutlinedButton(
-              child: Text('Go to User 123'),
+              child: Text('Go to User 5'),
+              onPressed: () {
+                PageRouter.of(context).pushNamed('/users/5');
+              },
+            ),
+            OutlinedButton(
+              child: Text('Go to User 123 (invalid route)'),
               onPressed: () {
                 PageRouter.of(context).pushNamed('/users/123');
               },
