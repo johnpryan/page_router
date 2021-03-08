@@ -33,7 +33,7 @@ class _PageRouterExampleState extends State<PageRouterExample> {
         'preferences': RoutePath(
           validator: idValidator,
           builder: (context, params) => FadeTransitionPage(
-            key: ValueKey('/preferences'),
+            key: ValueKey('preferences'),
             child: UserPreferencesScreen(
               userId: params[':id'],
             ),
@@ -119,6 +119,7 @@ class UserScreen extends StatelessWidget {
                 PageRouter.of(context).pushNamed('/users/$userId/preferences');
               },
             ),
+            PageRouterOutlet(),
           ],
         ),
       ),

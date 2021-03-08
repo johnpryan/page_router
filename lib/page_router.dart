@@ -213,3 +213,10 @@ class PageRouterInformationParser extends RouteInformationParser<RouteData> {
     return RouteInformation(location: data.routeString);
   }
 }
+
+class PageRouterOutlet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text("OUTLET");
+  }
+}
