@@ -1,5 +1,7 @@
 # page_router
 
+ARCHIVED: See [go_router_prototype](https://github.com/johnpryan/go_router_prototype)
+
 Experimental router for Flutter built using the Navigator 2.0 API.
 
 ## Usage
